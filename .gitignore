@@ -1,0 +1,33 @@
+# Data files (not included — place your own per PROJECT_README.md)
+*.csv
+*.pdf
+data/
+
+# Submission & task files
+submission-form.md
+analyze.py
+email-thread.txt
+README.txt
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.env
+
+# Validation output (regenerated on run)
+validation/results.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

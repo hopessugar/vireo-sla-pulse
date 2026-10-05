@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vireo Audio SLA Breach Intelligence Dashboard">
+    <title>Vireo SLA Pulse</title>
+    <link rel="stylesheet" href="/static/css/design-system.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-layout">
+
+        <!-- ═══ SIDEBAR ═══════════════════════════════════════════ -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-logo">V</div>
+                <div>
+                    <div class="sidebar-title">SLA Pulse</div>
+                    <div class="sidebar-subtitle">Vireo Audio</div>
+                </div>
+            </div>
+
+            <div class="sidebar-profile">
+                <div class="sidebar-profile-avatar">NK</div>
+                <div class="sidebar-profile-name">Neha Kulkarni</div>
+                <div class="sidebar-profile-role">Support Operations Manager</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="overview">
+                    <span class="nav-icon">&#9635;</span> Dashboard
+                </button>
+                <button class="nav-item" data-tab="agents">
+                    <span class="nav-icon">&#9673;</span> Agents
+                    <span class="nav-badge" id="agentBreachCount">0</span>
+                </button>
+                <button class="nav-item" data-tab="trends">
+                    <span class="nav-icon">&#9650;</span> Weekly Trends
+                </button>
+                <button class="nav-item" data-tab="packs">
+                    <span class="nav-icon">&#9993;</span> Conversation Packs
+                </button>
+                <button class="nav-item" data-tab="patterns">
+                    <span class="nav-icon">&#10022;</span> Patterns
+                </button>
+                <button class="nav-item" data-tab="financial">
+                    <span class="nav-icon">&#8377;</span> Financial Impact
+                </button>
+                <button class="nav-item" data-tab="methodology">
+                    <span class="nav-icon">&#10003;</span> Methodology
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-footer-text">Data: Jan 2025 - Jun 2026<br>18 months | 44 agents</div>
+            </div>
+        </aside>
+
+        <!-- ═══ MAIN CONTENT ══════════════════════════════════════ -->
+        <main class="main-content">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div>
+                    <div class="page-greeting">SLA Breach <span>Report</span></div>
+                    <div class="page-date">First-response breach analysis by agent and shift, weekly</div>
+                </div>
+                <div class="header-actions">
+                    <div class="search-box">
+                        <span class="search-icon">&#128269;</span>
+                        <input type="text" id="agentSearch" placeholder="Search agents...">
+                    </div>
+                    <select class="week-select" id="weekSelector">
+                        <option value="all">All Weeks</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ═══ OVERVIEW ══════════════════════════════════════ -->
+            <div class="tab-content active" id="tab-overview">
+                <!-- KPI Row with circular rings -->
+                <div class="kpi-row">
+                    <div class="kpi-card animate-in">
+                        <div class="kpi-info">
+                            <div class="kpi-label">Tickets Analyzed</div>
+                            <div class="kpi-value accent" id="kpiTotal">--</div>
+                            <div class="kpi-detail" id="kpiTotalDetail">Loading...</div>
+                        </div>
+                        <div class="kpi-ring">
+                            <svg viewBox="0 0 72 72">
+                                <circle class="ring-bg" cx="36" cy="36" r="30"/>
+                                <circle class="ring-fill accent" cx="36" cy="36" r="30"
+                                    stroke-dasharray="188.5" stroke-dashoffset="0" id="ringTotal"/>
+                            </svg>
+                            <div class="kpi-ring-label" id="ringTotalLabel">100%</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card animate-in">
+                        <div class="kpi-info">
+                            <div class="kpi-label">SLA Breaches</div>
+                            <div class="kpi-value danger" id="kpiBreached">--</div>
+                            <div class="kpi-detail" id="kpiBreachedDetail">Loading...</div>
+                        </div>
+                        <div class="kpi-ring">
+                            <svg viewBox="0 0 72 72">
+                                <circle class="ring-bg" cx="36" cy="36" r="30"/>
+                                <circle class="ring-fill danger" cx="36" cy="36" r="30"
+                                    stroke-dasharray="188.5" stroke-dashoffset="188.5" id="ringBreached"/>
+                            </svg>
+                            <div class="kpi-ring-label" id="ringBreachedLabel">0%</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card animate-in">
+                        <div class="kpi-info">
+                            <div class="kpi-label">Morning Shift</div>
+                            <div class="kpi-value danger" id="kpiMorning">--</div>
+                            <div class="kpi-detail" id="kpiMorningDetail">Highest breach rate</div>
+                        </div>
+                        <div class="kpi-ring">
+                            <svg viewBox="0 0 72 72">
+                                <circle class="ring-bg" cx="36" cy="36" r="30"/>
+                                <circle class="ring-fill rose" cx="36" cy="36" r="30"
+                                    stroke-dasharray="188.5" stroke-dashoffset="188.5" id="ringMorning"/>
+                            </svg>
+                            <div class="kpi-ring-label" id="ringMorningLabel">0%</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card animate-in">
+                        <div class="kpi-info">
+                            <div class="kpi-label">SLA Credits</div>
+                            <div class="kpi-value warning" id="kpiCredits">--</div>
+                            <div class="kpi-detail" id="kpiCreditsDetail">Rs 350 per breach</div>
+                        </div>
+                        <div class="kpi-ring">
+                            <svg viewBox="0 0 72 72">
+                                <circle class="ring-bg" cx="36" cy="36" r="30"/>
+                                <circle class="ring-fill amber" cx="36" cy="36" r="30"
+                                    stroke-dasharray="188.5" stroke-dashoffset="94.25" id="ringCredits"/>
+                            </svg>
+                            <div class="kpi-ring-label" id="ringCreditsLabel">Rs</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title"><span class="icon">&#9670;</span> Breach Rate by Shift</div>
+                        <div class="chart-container"><canvas id="chartShift"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title"><span class="icon">&#9670;</span> Breach Rate by Channel</div>
+                        <div class="chart-container"><canvas id="chartChannel"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card full-width">
+                        <div class="card-title">
+                            <span class="icon">&#9650;</span> Weekly Breach Trend
+                            <span class="card-subtitle">18 months | Jan 2025 - Jun 2026</span>
+                        </div>
+                        <div class="chart-container tall"><canvas id="chartTrend"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title"><span class="icon">&#9673;</span> Breaches by Category</div>
+                        <div class="chart-container tall"><canvas id="chartCategory"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title"><span class="icon">&#9737;</span> Breach Heatmap (IST hour x Day)</div>
+                        <div id="heatmapContainer" style="overflow-x:auto;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ AGENTS ════════════════════════════════════════ -->
+            <div class="tab-content" id="tab-agents">
+                <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:var(--space-lg);">
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <div class="kpi-label">Morning Breach Rate</div>
+                            <div class="kpi-value danger" id="morningRate">--</div>
+                        </div>
+                        <div class="kpi-ring">
+                            <svg viewBox="0 0 72 72">
+                                <circle class="ring-bg" cx="36" cy="36" r="30"/>
+                                <circle class="ring-fill danger" cx="36" cy="36" r="30"
+                                    stroke-dasharray="188.5" stroke-dashoffset="128" id="ringMornAgent"/>
+                            </svg>
+                            <div class="kpi-ring-label" id="ringMornAgentLabel">--</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <div class="kpi-label">Day Shift Rate</div>
+                            <div class="kpi-value success" id="dayRate">--</div>
+                        </div>
+                        <div class="kpi-ring">
+                            <svg viewBox="0 0 72 72">
+                                <circle class="ring-bg" cx="36" cy="36" r="30"/>
+                                <circle class="ring-fill success" cx="36" cy="36" r="30"
+                                    stroke-dasharray="188.5" stroke-dashoffset="170" id="ringDayAgent"/>
+                            </svg>
+                            <div class="kpi-ring-label" id="ringDayAgentLabel">--</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <div class="kpi-label">Agents Breaching >30%</div>
+                            <div class="kpi-value danger" id="highBreachAgents">--</div>
+                            <div class="kpi-detail">All Morning shift</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><span class="icon">&#9673;</span> Agent Performance Table</div>
+                    <div class="table-wrapper" style="max-height:600px;overflow-y:auto;">
+                        <table class="data-table" id="agentTable">
+                            <thead>
+                                <tr>
+                                    <th data-sort="name">Agent</th>
+                                    <th data-sort="shift">Shift</th>
+                                    <th data-sort="site">Site</th>
+                                    <th data-sort="team">Team</th>
+                                    <th data-sort="total">Tickets</th>
+                                    <th data-sort="breached" class="sorted-desc">Breaches</th>
+                                    <th data-sort="breach_rate">Rate</th>
+                                    <th data-sort="avg_response_mins">Avg Resp</th>
+                                    <th>Visual</th>
+                                </tr>
+                            </thead>
+                            <tbody id="agentTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ TRENDS ════════════════════════════════════════ -->
+            <div class="tab-content" id="tab-trends">
+                <div class="card" style="margin-bottom:var(--space-lg);">
+                    <div class="card-title"><span class="icon">&#9650;</span> Weekly Breach Rate by Shift</div>
+                    <div class="chart-container tall"><canvas id="chartShiftTrend"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-title"><span class="icon">&#9993;</span> Weekly Report Detail</div>
+                    <div id="weeklyReportContent" style="padding:var(--space-lg);color:var(--text-muted);text-align:center;">
+                        Select a week from the dropdown above to view the detailed report.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ CONVERSATION PACKS ════════════════════════════ -->
+            <div class="tab-content" id="tab-packs">
+                <div style="margin-bottom:var(--space-lg);">
+                    <h2 style="font-size:1.2rem;font-weight:800;color:var(--text-primary);margin-bottom:4px;">Conversation Packs</h2>
+                    <p style="color:var(--text-secondary);font-size:0.82rem;">
+                        1:1 talking points for agents with significant breaches. Click to expand.
+                        Framed constructively to support improvement.
+                    </p>
+                </div>
+                <div id="packsContainer" class="loading">
+                    <div class="spinner"></div>
+                    Loading conversation packs...
+                </div>
+            </div>
+
+            <!-- ═══ PATTERNS ══════════════════════════════════════ -->
+            <div class="tab-content" id="tab-patterns">
+                <div style="margin-bottom:var(--space-lg);">
+                    <h2 style="font-size:1.2rem;font-weight:800;">Breach Pattern Intelligence</h2>
+                    <p style="color:var(--text-secondary);font-size:0.82rem;">
+                        AI-detected patterns showing why breaches cluster.
+                    </p>
+                </div>
+                <div id="patternsContainer" class="loading">
+                    <div class="spinner"></div>
+                    Detecting patterns...
+                </div>
+            </div>
+
+            <!-- ═══ FINANCIAL ═════════════════════════════════════ -->
+            <div class="tab-content" id="tab-financial">
+                <div class="finance-hero" id="financialHero">
+                    <div class="finance-label">Total SLA Credits Issued (18 months)</div>
+                    <div class="finance-amount" id="financialTotal">--</div>
+                    <div class="finance-sub" id="financialContext">Loading financial analysis...</div>
+                    <div class="savings-row" id="savingsGrid"></div>
+                </div>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-title"><span class="icon">&#9670;</span> Monthly Credits: Current vs Target</div>
+                        <div class="chart-container"><canvas id="chartMonthlyCost"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title"><span class="icon">&#10004;</span> Savings Breakdown</div>
+                        <div class="chart-container"><canvas id="chartSavings"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ METHODOLOGY ═══════════════════════════════════ -->
+            <div class="tab-content" id="tab-methodology">
+                <div class="meth-section">
+                    <h3>Data Processing Pipeline</h3>
+                    <ul>
+                        <li>Loaded <strong id="methTotalRaw">--</strong> raw rows from tickets.csv</li>
+                        <li>Removed <strong id="methDuplicates">--</strong> duplicate tickets (migration re-imports per Sameer)</li>
+                        <li>Excluded open/pending tickets from breach calculation</li>
+                        <li>Normalized CSAT: legacy <code>0</code> treated as <code>null</code> (no response, not a rating)</li>
+                        <li>All timestamps converted from UTC to IST (UTC+5:30) for shift assignment</li>
+                    </ul>
+                </div>
+                <div class="meth-section">
+                    <h3>SLA Thresholds (support-policy.pdf Section 3)</h3>
+                    <ul>
+                        <li>Chat: <code>15 minutes</code> first response</li>
+                        <li>Voice callback: <code>2 hours (120 min)</code></li>
+                        <li>Social: <code>4 hours (240 min)</code></li>
+                        <li>Email: <code>8 hours (480 min)</code></li>
+                    </ul>
+                    <p style="margin-top:12px;">Each breach triggers <code>Rs 350</code> store credit (Section 3). Attributed to the resolving agent.</p>
+                </div>
+                <div class="meth-section">
+                    <h3>Shift Definitions (IST, Section 7)</h3>
+                    <ul>
+                        <li>Morning: <code>06:00 - 14:00 IST</code></li>
+                        <li>Day: <code>14:00 - 22:00 IST</code></li>
+                        <li>Night: <code>22:00 - 06:00 IST</code></li>
+                    </ul>
+                </div>
+                <div class="meth-section">
+                    <h3>Agent Assignment (Temporal Join)</h3>
+                    <p>Roster uses <code>from_date</code> / <code>to_date</code> ranges. Agent's shift at ticket creation time is used, correctly handling the June 2025 Indore reshuffle (A3002, A3003 moved Night to Day).</p>
+                </div>
+                <div class="meth-section">
+                    <h3>AI Classification Validation</h3>
+                    <ul>
+                        <li>Rule-based classifier validates bot categories against customer message text</li>
+                        <li>Accuracy vs bot categories: <strong id="methAccuracy">--</strong>%</li>
+                        <li>High-confidence mismatches: <strong id="methMismatches">--</strong></li>
+                        <li>Zero external API cost</li>
+                    </ul>
+                </div>
+                <div class="meth-section">
+                    <h3>Known Limitations</h3>
+                    <ul>
+                        <li>~40 failed IVR transcripts included (valid timestamps, just garbled text)</li>
+                        <li>Tier 2 agents (Escalations & Warranty) measured on resolution days per Section 6 -- breach rate comparison with Tier 1 is not apples-to-apples</li>
+                        <li>Weekly trend for partial weeks (first/last) may show skewed rates</li>
+                        <li>Rule-based classifier has lower accuracy on "Other" (catch-all category)</li>
+                    </ul>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
