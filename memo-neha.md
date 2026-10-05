@@ -71,4 +71,4 @@ It runs on a single command (`python run.py`), costs nothing to operate, and nee
 
 ---
 
-*This memo is 1 page (~5 minutes to read). The full dashboard is at http://localhost:8000.*
+*This memo is 1 page (~5 minutes to read). *
