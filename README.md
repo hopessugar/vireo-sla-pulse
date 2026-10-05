@@ -169,9 +169,9 @@ vireo-sla-pulse/
 ├── 🔬 validation/
 │   └── validate_sla.py          # Stratified sample validation
 │
-└── 📄 docs/
-    ├── memo-neha.md             # One-page memo (non-technical)
-    └── decisions.md             # 12 documented design decisions
+├── 📋 submission-form.md        # Completed submission form
+├── 📝 memo-neha.md              # One-page memo (non-technical)
+└── 📄 decisions.md              # 12 documented design decisions
 ```
 
 <br>
@@ -223,7 +223,7 @@ Every ambiguity was documented. Here are the critical ones:
 
 ## 📋 Memo
 
-The one-page memo to Neha Kulkarni is at [`docs/memo-neha.md`](docs/memo-neha.md).
+The one-page memo to Neha Kulkarni is at [`memo-neha.md`](memo-neha.md).
 
 **TL;DR:** The problem isn't slow agents — it's a pre-breached overnight queue. Two cost-neutral fixes:
 1. Stagger one agent to 05:00 IST to clear the queue

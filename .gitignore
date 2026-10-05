@@ -3,8 +3,7 @@
 *.pdf
 data/
 
-# Submission & task files
-submission-form.md
+# Task files (not deliverables)
 analyze.py
 email-thread.txt
 README.txt
