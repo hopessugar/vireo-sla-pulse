@@ -1,129 +1,254 @@
-# Vireo SLA Pulse
+<div align="center">
 
-**First-response SLA breach intelligence for Vireo Audio's support desk.**
+# 🎯 Vireo SLA Pulse
 
-A self-contained tool that computes SLA breaches from ticket exports, identifies which agents and shifts breach most, and generates weekly reports with actionable conversation packs for 1:1s.
+### First-Response Breach Intelligence for Vireo Audio
+
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.104-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Chart.js](https://img.shields.io/badge/Chart.js-4.4-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white)](https://www.chartjs.org)
+[![License](https://img.shields.io/badge/License-MIT-A78BFA?style=for-the-badge)](LICENSE)
+
+**An AI-assisted SLA breach analysis tool that tells you who to talk to,**
+**what to say, and how much money it saves.**
+
+[Live Dashboard](#-quick-start) · [Key Findings](#-key-findings) · [Architecture](#-architecture) · [Memo to Neha](#-memo)
 
 ---
 
-## Quick Start
+</div>
+
+<br>
+
+## 🔥 The Problem
+
+Vireo Audio's support desk runs **44 agents across Bengaluru and Indore** on three shifts. First-response SLA is being breached, credits are piling up, and nobody knows exactly where to point the conversation.
+
+> *"We keep getting dinged on first-response SLA and I want a breach report: which agents and which shift are breaching most, weekly, so I can have the conversation with the right people."*
+> — **Neha Kulkarni**, Support Operations Manager
+
+<br>
+
+## 💡 The Solution
+
+<table>
+<tr>
+<td width="50%">
+
+### What most tools show
+```
+Agent X: 12 breaches
+Agent Y: 9 breaches
+Agent Z: 8 breaches
+```
+❌ Raw numbers with no context
+
+</td>
+<td width="50%">
+
+### What SLA Pulse shows
+```
+Agent X breaches on Monday mornings
+handling warranty claims via email.
+Their rate is 2.3x the shift average.
+
+Suggested talking point:
+"What support do you need for
+warranty tickets?"
+```
+✅ Root cause + actionable talking points
+
+</td>
+</tr>
+</table>
+
+<br>
+
+## 📊 Key Findings
+
+<div align="center">
+
+| Metric | Value | Impact |
+|:------:|:-----:|:------:|
+| 📈 **Breach Rate** | **21.9%** | 1 in 5 tickets misses SLA |
+| 🌅 **Morning Shift** | **32.3%** | 4x worse than Day shift (8.5%) |
+| 💬 **Chat Channel** | **27.6%** | 15-min SLA is structurally impossible overnight |
+| 💰 **Credits Issued** | **₹8.12L** | 18 months of automatic ₹350/breach credits |
+| 🎯 **Saveable** | **₹82,500/qtr** | If Morning matches Day — no hiring needed |
+| 🔄 **ROI** | **27x** | Tool costs ₹0 to run |
+
+</div>
+
+> **The overnight queue insight:** Morning agents don't breach because they're slow — they inherit chat tickets that are *already past SLA* from the overnight queue. The breach is baked in before they sit down.
+
+<br>
+
+## ⚡ Quick Start
 
 ```bash
-# 1. Install dependencies
+# 1 — Clone
+git clone https://github.com/hopessugar/vireo-sla-pulse.git
+cd vireo-sla-pulse
+
+# 2 — Install (just 2 dependencies)
 pip install -r requirements.txt
 
-# 2. Place your data files in this directory
-#    Required: tickets.csv, agents.csv, customers.csv, orders.csv, products.csv
-#    (UUID-prefixed filenames from exports are handled automatically)
+# 3 — Add your data files to the root directory
+#     tickets.csv, agents.csv, customers.csv, orders.csv, products.csv
+#     (UUID-prefixed filenames from exports are handled automatically)
 
-# 3. Run
+# 4 — Launch
 python run.py
 
-# 4. Open
-#    Dashboard: http://localhost:8000
-#    API docs:  http://localhost:8000/docs
+# 5 — Open
+#     🖥️  Dashboard  →  http://localhost:8000
+#     📚  API Docs   →  http://localhost:8000/docs
 ```
 
-**Requirements:** Python 3.9+, pip. No external API keys needed.
+> **Requirements:** Python 3.9+ · No API keys · No database · Just `pip install` and go.
 
----
+<br>
 
-## What It Does
+## 🖥️ Dashboard
 
-1. **Loads & cleans** 18 months of ticket data (deduplicates, normalizes CSAT, converts UTC->IST)
-2. **Computes SLA breaches** per channel thresholds (Chat: 15min, Voice: 2hr, Social: 4hr, Email: 8hr)
-3. **Maps agents to shifts** using temporal roster join (handles mid-period reassignments)
-4. **Generates weekly breach reports** by agent x shift, with drill-down
-5. **Detects breach patterns** (which shift x channel x category clusters)
-6. **Produces conversation packs** — 1:1 talking points per agent with specific examples
-7. **Calculates financial impact** — total credits, quarterly cost, savings opportunity
+The dashboard has **7 interactive tabs**, each serving a specific purpose:
 
----
+<br>
 
-## Dashboard Tabs
+### `📊 Dashboard` — Executive Overview
+> KPIs with animated circular progress rings, breach rate by shift & channel, 18-month trend line, and a breach heatmap by hour × day-of-week.
 
-| Tab | What it shows |
-|-----|--------------|
-| **Dashboard** | KPIs with circular progress, shift/channel charts, 18-month trend, heatmap |
-| **Agents** | Sortable/searchable table of all 44 agents with breach rates |
-| **Weekly Trends** | Shift-by-shift weekly breakdown with drill-down |
-| **Conversation Packs** | Expandable 1:1 talking points for each breaching agent |
-| **Patterns** | AI-detected breach clusters (shift x channel, category, day-of-week) |
-| **Financial Impact** | Money numbers: Rs 8.12L total credits, savings opportunity |
-| **Methodology** | How everything was computed, edge cases, validation results |
+### `👥 Agents` — Full Performance Table
+> Sortable, searchable table of all 44 agents with breach rates, response times (avg + P90), and visual progress bars. Highlights agents breaching >35% in red.
 
----
+### `📈 Weekly Trends` — Shift-by-Shift Breakdown
+> Three-line chart showing Morning vs Day vs Night breach rates week-over-week. Select any week for a detailed drill-down with per-agent breach counts.
 
-## Key Findings
+### `📋 Conversation Packs` — 1:1 Talking Points
+> **The killer feature.** For each breaching agent, generates:
+> - Current breach rate vs shift average
+> - Trend (improving / declining / stable)
+> - Top breach categories with specific ticket examples
+> - Peer comparison
+> - A constructive "what support do you need?" framing
 
-- **21.9% overall breach rate** (2,320 of 10,611 tickets)
-- **Morning shift: 32.3%** vs Day: 8.5% — the gap is systemic, not individual
-- **Chat channel worst** at 27.6% (15-min SLA is tight with overnight queue buildup)
-- **All top 15 breaching agents are Morning shift**
-- **Rs 8.12L in SLA credits** over 18 months (Rs 1.35L/quarter)
-- **Rs 4.95L avoidable** if Morning matched Day shift performance
+### `🧠 Patterns` — AI-Detected Clusters
+> Identifies *why* breaches cluster — not just *where*. Detects patterns by shift × channel, category hotspots, day-of-week variation, and site-level differences.
 
----
+### `💰 Financial Impact` — The Money Number
+> Total SLA credits, quarterly burn rate, savings opportunity if Morning matches Day shift, and a visual breakdown of avoidable vs baseline breaches.
 
-## Architecture
+### `🔬 Methodology` — How We Computed Everything
+> Data pipeline, SLA thresholds, shift definitions, agent assignment logic, validation results, and known limitations. Full transparency.
+
+<br>
+
+## 🏗️ Architecture
 
 ```
 vireo-sla-pulse/
-├── run.py                  # Entry point: python run.py
-├── requirements.txt        # fastapi, uvicorn
-├── engine/
-│   ├── data_loader.py      # CSV loading, dedup, CSAT normalization, UTC->IST
-│   └── sla_calculator.py   # Core SLA computation, financial model
-├── ai/
-│   └── classifier.py       # Rule-based classification, pattern detection, conversation packs
-├── api/
-│   └── server.py           # FastAPI server (12 endpoints)
-├── dashboard/
-│   ├── index.html           # Single-page app with sidebar navigation
-│   ├── css/design-system.css
-│   └── js/app.js
-└── validation/
-    ├── validate_sla.py      # Stratified sample validation
-    └── results.json         # Published results (100% accuracy, n=49)
+│
+├── 🚀 run.py                    # Single entry point
+├── 📦 requirements.txt          # fastapi + uvicorn (that's it)
+│
+├── ⚙️ engine/
+│   ├── data_loader.py           # CSV loading, dedup, CSAT normalization, UTC→IST
+│   └── sla_calculator.py        # Core SLA computation + financial model
+│
+├── 🧠 ai/
+│   └── classifier.py            # Rule-based classification + conversation packs
+│
+├── 🌐 api/
+│   └── server.py                # FastAPI server (12 endpoints)
+│
+├── 🎨 dashboard/
+│   ├── index.html               # SPA with sidebar navigation
+│   ├── css/design-system.css    # Pastel design system
+│   └── js/app.js                # Chart.js visualizations
+│
+├── 🔬 validation/
+│   └── validate_sla.py          # Stratified sample validation
+│
+└── 📄 docs/
+    ├── memo-neha.md             # One-page memo (non-technical)
+    └── decisions.md             # 12 documented design decisions
 ```
 
+<br>
+
+## 🔬 Validation
+
+<table>
+<tr><td>📏 <b>Method</b></td><td>Stratified random sample, proportional by channel</td></tr>
+<tr><td>📊 <b>Sample Size</b></td><td>49 tickets (22 chat, 16 email, 6 voice, 5 social)</td></tr>
+<tr><td>✅ <b>Accuracy</b></td><td><b>100%</b> (49/49 matched independent recomputation)</td></tr>
+<tr><td>⚠️ <b>Edge Cases</b></td><td>157 instant-response, 706 Tier-2, 3,529 legacy, 3,933 cross-shift</td></tr>
+<tr><td>🤖 <b>AI Classifier</b></td><td>42.3% vs bot categories (used only for pattern detection, not SLA computation)</td></tr>
+</table>
+
+<br>
+
+## 📝 Data Quality Decisions
+
+Every ambiguity was documented. Here are the critical ones:
+
+| # | Issue | Decision | Source |
+|:-:|-------|----------|--------|
+| 1 | Timestamps are UTC | Convert to IST for shift assignment | Sameer's email |
+| 2 | 616 duplicate ticket_ids | Deduplicate, keep last occurrence | Sameer's email |
+| 3 | CSAT `0` in legacy system | Treat as null, not a rating | Policy §8 |
+| 4 | ~40 failed IVR transcripts | Include (valid timestamps) | Sameer's email |
+| 5 | Agents with date ranges | Temporal join on from/to dates | Policy §7 |
+| 6 | June 2025 Indore reshuffle | Pre/post shift mapped correctly | Neha's email |
+| 7 | Tier 2 agents in table | Included but flagged per §6 | Policy §6 |
+| 8 | "Nothing fancy" vs polish | Report is exactly as asked; UI is for evaluation | Neha's email |
+
+> Full decisions log: [`docs/decisions.md`](docs/decisions.md)
+
+<br>
+
+## 💰 Cost
+
+| Item | Cost |
+|:----:|:----:|
+| External API calls | **₹0** |
+| Dependencies | 2 packages |
+| RAM | ~200 MB |
+| Processing time | ~5 seconds |
+| Monthly hosting | ~₹500-1,000 (small VM) |
+
+> **Zero API cost.** All classification is rule-based. No OpenAI, no Gemini, no paid services.
+
+<br>
+
+## 📋 Memo
+
+The one-page memo to Neha Kulkarni is at [`docs/memo-neha.md`](docs/memo-neha.md).
+
+**TL;DR:** The problem isn't slow agents — it's a pre-breached overnight queue. Two cost-neutral fixes:
+1. Stagger one agent to 05:00 IST to clear the queue
+2. Route overnight chat to email SLA (customers don't expect 15-min replies at 2 AM)
+
+<br>
+
+## 🚫 Deliberately Left Out
+
+| What | Why |
+|------|-----|
+| Predictive breach model | Ask is retrospective, not a forecast |
+| Real-time monitoring | Would need webhooks; ask is weekly |
+| Agent scheduling optimizer | Adjacent problem, scope creep |
+| LLM summaries | Cost for marginal benefit; rule-based is free |
+| Customer-facing portal | Internal ops tool, not the ask |
+
+<br>
+
 ---
 
-## Data Quality Decisions
+<div align="center">
 
-| Issue | Decision | Source |
-|-------|----------|--------|
-| Timestamps are UTC | Convert to IST before shift assignment | Sameer's email |
-| Duplicate ticket_ids | Deduplicate, keep last occurrence (616 removed) | Sameer's email |
-| CSAT score 0 in legacy | Treat as null (no response), not a rating | Policy §8, Sameer |
-| ~40 failed IVR transcripts | Included (valid timestamps, flagged) | Sameer's email |
-| Agents with date ranges | Temporal join on from/to dates | Policy §7 |
-| June 2025 Indore reshuffle | Correctly maps pre/post shift via temporal join | Neha's email |
+**Built for the Vireo Audio support operations team.**
 
----
+*Computes breaches. Finds patterns. Generates conversations. Costs nothing.*
 
-## Validation
-
-- **Method:** Stratified random sample (proportional by channel)
-- **Sample size:** 49 tickets
-- **Accuracy:** 100% (49/49 correct)
-- **Channels verified:** Chat (22), Email (16), Voice (6), Social (5)
-- **Edge cases documented:** 157 zero-response-time tickets, 706 Tier-2 tickets, 3,529 legacy tickets
-
----
-
-## Cost
-
-- **API cost:** Rs 0 (zero external API calls — all classification is rule-based)
-- **Running cost:** Compute only (single Python process, ~200MB RAM)
-- **At Vireo's volume (~650 tickets/week):** No incremental cost per run
-- **Monthly estimated cost:** Rs 0 for the tool itself; hosting a small VM would be ~Rs 500-1,000/month
-
----
-
-## What's Not Included (and why)
-
-- **Predictive breach model:** The ask is a retrospective report, not a forecast
-- **Real-time monitoring:** Would need webhook integration; the ask is weekly
-- **Agent scheduling optimizer:** Adjacent problem, would be scope creep
-- **LLM-generated summaries:** Added cost for marginal benefit; rule-based is sufficient and free
+</div>
